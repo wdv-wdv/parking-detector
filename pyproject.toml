@@ -1,0 +1,96 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "parkingdetector"
+dynamic = ["version"]
+description = ''
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "U.N. Owen", email = "void@some.where" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "click",
+  "opencv-python",
+  "imutils",
+  "cvzone",
+  "numpy",
+  "statistics",
+  "ultralytics",
+  "slack_sdk"
+]
+
+[project.urls]
+Documentation = "https://github.com/unknown/parkingdetector#readme"
+Issues = "https://github.com/unknown/parkingdetector/issues"
+Source = "https://github.com/unknown/parkingdetector"
+
+[project.scripts]
+parkingdetector = "parkingdetector"
+
+[tool.hatch.version]
+path = "src/parkingdetector/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "coverage[toml]>=6.5",
+  "pytest",
+]
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "coverage run -m pytest {args:tests}"
+cov-report = [
+  "- coverage combine",
+  "coverage report",
+]
+cov = [
+  "test-cov",
+  "cov-report",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/parkingdetector"]
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+[tool.hatch.envs.types]
+dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/parkingdetector tests}"
+
+[tool.coverage.run]
+source_pkgs = ["parkingdetector", "tests"]
+branch = true
+parallel = true
+#omit = [
+#  "src/parkingdetector/__about__.py",
+#]
+
+[tool.coverage.paths]
+parkingdetector = ["src/parkingdetector", "*/parkingdetector/src/parkingdetector"]
+tests = ["tests", "*/parkingdetector/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
